@@ -19,6 +19,7 @@ resolve_s3 = true
 s3_prefix = "auction-services"
 region = "eu-north-1"
 image_repositories = []
+disable_rollback = true
 
 [default.package.parameters]
 resolve_s3 = true

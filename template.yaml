@@ -17,8 +17,8 @@ Resources:
   createAuction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
-      CodeUri: src/handler
-      Handler: createAuction.lambdaHandler
+      CodeUri: ./
+      Handler: src/handler/createAuction.lambdaHandler
       Events:
         AuctionApi:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
@@ -43,7 +43,7 @@ Resources:
             - AttributeName: userName
               KeyType: HASH
           Projection: 
-            ProjectionType: All
+            ProjectionType: ALL
           ProvisionedThroughput:
             ReadCapacityUnits: 5
             WriteCapacityUnits: 5         

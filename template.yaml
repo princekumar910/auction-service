@@ -9,7 +9,7 @@ Description: >
 Globals:
   Function:
     Timeout: 3
-    Runtime: nodejs22.x
+    Runtime: nodejs20.x
     Architectures:
       - x86_64
 
@@ -17,39 +17,32 @@ Resources:
   createAuction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
-      CodeUri: ./
+      CodeUri: ./       # these must refer to package.json because it help to deploy dependency
       Handler: src/handler/createAuction.lambdaHandler
       Events:
         AuctionApi:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
             Path: /auction
-            Method: post
+            Method: post 
+      Policies: 
+        - Statement:
+            Effect: Allow
+            Action:
+              - dynamodb:PutItem
+            Resource: arn:aws:dynamodb:eu-north-1:209479300905:table/AuctionTable              
   AuctionTable:
     Type: AWS::DynamoDB::Table
     Properties:
       TableName: AuctionTable
+      BillingMode: PAY_PER_REQUEST        
       AttributeDefinitions:
         - AttributeName: Id
           AttributeType: S
-        - AttributeName: userName
-          AttributeType: S  
       KeySchema:
         - AttributeName: Id
-          KeyType: HASH
-      GlobalSecondaryIndexes:
-        - IndexName: UserNameIndex
-          KeySchema:
-            - AttributeName: userName
-              KeyType: HASH
-          Projection: 
-            ProjectionType: ALL
-          ProvisionedThroughput:
-            ReadCapacityUnits: 5
-            WriteCapacityUnits: 5         
-      ProvisionedThroughput:
-        ReadCapacityUnits: 5
-        WriteCapacityUnits: 5   
+          KeyType: HASH    
+  
    
           
 

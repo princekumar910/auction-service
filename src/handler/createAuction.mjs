@@ -3,22 +3,24 @@ import aws from 'aws-sdk';
 const dynamodbClient = new aws.DynamoDB.DocumentClient();
 
 export const lambdaHandler = async (event, context) => {
+  const {title} = JSON.parse(event.body)
   try {
-    // Correctly structure the DynamoDB put request
     const params = {
-      TableName: 'AuctionTable', // Replace with your actual table name
+      TableName: 'AuctionTable', 
       Item: {
-        id: "princekumar007p", // Example key-value pair
+        Id: "princekumar007p", 
+        userName : title
       },
     };
 
-    // Perform the DynamoDB put operation
+    
     await dynamodbClient.put(params).promise();
     console.log("Data inserted successfully");
 
     // Return a valid JSON response
     return {
       statusCode: 200,
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         message: "Data inserted successfully",
       }),
@@ -26,12 +28,12 @@ export const lambdaHandler = async (event, context) => {
   } catch (error) {
     console.error("Error:", error);
 
-    // Return a valid JSON response even in case of an error
     return {
       statusCode: 500,
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         message: "An error occurred",
-        error: error.message, // Optional: Include the error message for debugging
+        error: error.message,
       }),
     };
   }

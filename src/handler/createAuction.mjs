@@ -1,5 +1,5 @@
 import aws from 'aws-sdk';
-
+import { v4 as uuid } from 'uuid';
 const dynamodbClient = new aws.DynamoDB.DocumentClient();
 
 export const lambdaHandler = async (event, context) => {
@@ -8,7 +8,7 @@ export const lambdaHandler = async (event, context) => {
     const params = {
       TableName: 'AuctionTable', 
       Item: {
-        Id: "princekumar007p", 
+        Id: uuid(), 
         userName : title
       },
     };

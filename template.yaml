@@ -31,6 +31,24 @@ Resources:
             Action:
               - dynamodb:PutItem
             Resource: arn:aws:dynamodb:eu-north-1:209479300905:table/AuctionTable              
+
+  getAuctions:
+    Type: AWS::Serverless::Function  
+    Properties:
+      CodeUri: ./
+      Handler: src/handler/getAuctions.handler   
+      Events:
+        AuctionApi:
+          Type: Api
+          Properties:
+            Path: /auctions
+            Method: get  
+      Policies: 
+        - DynamoDBReadPolicy:
+            TableName: AuctionTable  
+      Environment:
+        Variables:
+          Table_Name : AuctionTable      
   AuctionTable:
     Type: AWS::DynamoDB::Table
     Properties:

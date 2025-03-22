@@ -29,7 +29,6 @@ try {
     // Return a valid JSON response
     return {
       statusCode: 200,
-      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         message: "Data inserted successfully",
       }),
@@ -39,7 +38,6 @@ try {
 
     return {
       statusCode: 500,
-      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         message: "An error occurred",
         error: error.message,

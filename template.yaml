@@ -18,7 +18,7 @@ Resources:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
       CodeUri: ./       # these must refer to package.json because it help to deploy dependency
-      Handler: src/handler/createAuction.lambdaHandler
+      Handler: src/handler/createAuction.handler
       Events:
         AuctionApi:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api

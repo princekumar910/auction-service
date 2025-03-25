@@ -66,7 +66,27 @@ Resources:
       Environment:
         Variables:
           Table_Name: AuctionTable
-
+  placeBid:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./
+      Handler: src/handler/placeBid.handler    
+      Events:
+        AuctionApi:
+          Type: Api
+          Properties:
+            Path: /auction/{id}/bid
+            Method: patch
+      Policies: 
+        - Statement:
+            Effect: Allow
+            Action:
+              - dynamodb:UpdateItem
+            Resource: arn:aws:dynamodb:eu-north-1:209479300905:table/AuctionTable 
+      Environment:
+        Variables:
+          Table_Name: AuctionTable
+          
   AuctionTable:
     Type: AWS::DynamoDB::Table
     Properties:

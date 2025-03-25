@@ -8,13 +8,19 @@ import httpErrorHandler from '@middy/http-error-handler';
 import createHttpError from 'http-errors';
  const createAuction = async (event, context) => {
   const {title} = event.body
-
+  const now = new Date()
   try {
     const params = {
       TableName: 'AuctionTable', 
       Item: {
         Id: uuid(), 
-        userName : title
+        Title : title ,
+        status : "open",
+        createdAt : now.toISOString(),
+        highestBid :{
+          amount : 0
+        }
+
       },
     };
   
@@ -36,17 +42,7 @@ import createHttpError from 'http-errors';
         message: "Data inserted successfully",
       }),
     };
-  } catch (error) {
-    console.error("Error:", error);
+  } 
 
-    return {
-      statusCode: 500,
-      body: JSON.stringify({
-        message: "An error occurred",
-        error: error.message,
-      }),
-    };
-  }
-};
 
 export const handler = middy(createAuction).use(jsonBodyParser()).use(httpEventNormalizer()).use(httpErrorHandler())

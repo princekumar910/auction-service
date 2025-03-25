@@ -8,7 +8,8 @@ Description: >
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
   Function:
-    Timeout: 3
+    Timeout: 10
+    MemorySize: 128
     Runtime: nodejs20.x
     Architectures:
       - x86_64
@@ -86,7 +87,7 @@ Resources:
       Environment:
         Variables:
           Table_Name: AuctionTable
-          
+
   AuctionTable:
     Type: AWS::DynamoDB::Table
     Properties:
@@ -102,5 +103,5 @@ Resources:
 Outputs:
   AuctionApi:
     Description: "API Gateway endpoint URL"
-    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/"          
+    # Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/"          
 

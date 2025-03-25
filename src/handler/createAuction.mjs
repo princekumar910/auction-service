@@ -1,12 +1,13 @@
 import aws from 'aws-sdk';
 import { v4 as uuid } from 'uuid';
-const dynamodbClient = new aws.DynamoDB.DocumentClient();
+const dynamodbClient = new aws.DynamoDB.DocumentClient({ region: 'eu-north-1'} );
 import middy from '@middy/core';
 import jsonBodyParser from '@middy/http-json-body-parser';
 import httpEventNormalizer from '@middy/http-event-normalizer';
 import httpErrorHandler from '@middy/http-error-handler';
 import createHttpError from 'http-errors';
  const createAuction = async (event, context) => {
+  console.log("hello world")
   const {title} = event.body
   const now = new Date()
   try {
@@ -23,12 +24,10 @@ import createHttpError from 'http-errors';
 
       },
     };
-  
-  
+    await dynamodbClient.put(params).promise();
     console.log("Data inserted successfully");
-  await dynamodbClient.put(params).promise();
 } catch (error) {
-  console.error(error);
+  console.error("error : ",error);
   throw new createHttpError.InternalServerError(error)
 }
 

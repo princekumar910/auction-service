@@ -8,6 +8,7 @@ import httpErrorHandler from '@middy/http-error-handler';
 import createHttpError from 'http-errors';
  const createAuction = async (event, context) => {
   const {title} = event.body
+
   try {
     const params = {
       TableName: 'AuctionTable', 
@@ -16,11 +17,10 @@ import createHttpError from 'http-errors';
         userName : title
       },
     };
-try {
   
   
+    console.log("Data inserted successfully");
   await dynamodbClient.put(params).promise();
-  console.log("Data inserted successfully");
 } catch (error) {
   console.error(error);
   throw new createHttpError.InternalServerError(error)
@@ -28,7 +28,10 @@ try {
 
     // Return a valid JSON response
     return {
-      statusCode: 200,
+      statusCode: 200, 
+      headers: {
+        'Content-Type': 'application/json'
+      },
       body: JSON.stringify({
         message: "Data inserted successfully",
       }),

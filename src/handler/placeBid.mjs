@@ -16,6 +16,9 @@ import { getAuctionById } from './getAuction.mjs';
   let UpdateAuction 
 
   let auction = await getAuctionById(id)
+   if(auction.status === 'closed'){
+      throw new createHttpError.Forbidden(`Bidding is closed. You can't bid`)
+    }
   if(auction.highestBid.amount >= amount){
     throw new createHttpError.Forbidden(`amount should be greater than ${auction.highestBid.amount}`)
   }
@@ -36,11 +39,9 @@ import { getAuctionById } from './getAuction.mjs';
      console.error(error);
       throw new createHttpError.InternalServerError(error)
   }
-
-  
      return {
       statusCode: 200,
-      headers: {
+      headers: { 
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(UpdateAuction),

@@ -93,7 +93,7 @@ Resources:
       CodeUri: ./
       Handler: src/handler/processAuction.handler
       Events:
-        MinuteSchedule:
+        DailySchedule:
           Type: Schedule
           Properties:
             Schedule: rate(1 day)  
@@ -106,7 +106,9 @@ Resources:
               Action:
                 - dynamodb:Query
                 - dynamodb:GetItem
-              Resource: arn:aws:dynamodb:eu-north-1:209479300905:table/AuctionTable          
+              Resource: 
+                - arn:aws:dynamodb:eu-north-1:209479300905:table/AuctionTable/index/statusAndEndingDate    
+                - arn:aws:dynamodb:eu-north-1:209479300905:table/AuctionTable      
 
   AuctionTable:
     Type: AWS::DynamoDB::Table
@@ -129,7 +131,7 @@ Resources:
             - AttributeName: status
               KeyType: HASH
             - AttributeName: endingAt
-              KeyType: Range
+              KeyType: RANGE
           Projection:
             ProjectionType: ALL
 

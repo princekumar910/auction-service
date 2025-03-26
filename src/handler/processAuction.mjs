@@ -1,4 +1,4 @@
-import { getEndedAuction } from "../../lib/endedAuctoin.mjs"
+import { getEndedAuction } from "../../lib/endedAuction.mjs"
 async function processAuction(event , context){
    console.log("processing")
    const auctionToClose = await getEndedAuction()

@@ -12,6 +12,9 @@ import { getAuctionById } from './getAuction.mjs';
  const placeBid = async (event, context) => {
   const {id} = event.pathParameters 
   const {amount} = event.body
+  if(!amount){
+    throw new createHttpError.Forbidden('amount will be required')
+  }
   
   let UpdateAuction 
 

@@ -9,6 +9,9 @@ import createHttpError from 'http-errors';
  const createAuction = async (event, context) => {
   console.log("hello world")
   const {title} = event.body
+  if(!title){
+       throw new createHttpError.Forbidden('title is required for Auction')
+  }
   const now = new Date()
   const endDate = new Date()
   endDate.setHours(now.getHours() + 1);

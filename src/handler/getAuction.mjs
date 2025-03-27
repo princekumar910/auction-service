@@ -23,7 +23,7 @@ export async function getAuctionById(id){
     throw new createHttpError.InternalServerError(error)
   }
   if(!auction){
-    throw new createHttpError.NotFound(`No auciton find with ${id}`)
+    throw new createHttpError.NotFound(`No auction find with ${id}`)
   }
   return auction
 }

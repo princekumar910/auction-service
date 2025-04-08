@@ -7,7 +7,7 @@ import httpEventNormalizer from '@middy/http-event-normalizer';
 import httpErrorHandler from '@middy/http-error-handler';
 import createHttpError from 'http-errors';
  const createAuction = async (event, context) => {
-  console.log("hello world")
+  console.log("hello world" , event)
   const {title} = event.body
   if(!title){
        throw new createHttpError.Forbidden('title is required for Auction')

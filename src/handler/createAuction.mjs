@@ -15,8 +15,7 @@ import createHttpError from 'http-errors';
   const now = new Date()
   const endDate = new Date()
   endDate.setHours(now.getHours() + 1);
-  console.log("now time",now.getHours())
-  console.log("end time" , endDate.toISOString())
+  const {email} = JSON.parse(event.requestContext.authorizer.claims)
   try {
     const params = {
       TableName: 'AuctionTable', 
@@ -28,8 +27,8 @@ import createHttpError from 'http-errors';
         endingAt : endDate.toISOString(),
         highestBid :{
           amount : 0
-        }
-
+        },
+        seller : email
       },
     };
     await dynamodbClient.put(params).promise();

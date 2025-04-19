@@ -1,0 +1,1 @@
+ParameterKey=SQSURL,ParameterValue="notification-service-stack-MessageQueueUrl"

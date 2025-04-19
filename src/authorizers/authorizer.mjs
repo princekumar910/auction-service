@@ -49,11 +49,7 @@ export async function handler(event, context) {
     const singInKey = await getSignInKey(kid)
      
 
-    const claims = jwt.verify(token.split(" ")[1] , singInKey , {
-        algorithms: ['RS256'],
-        audience: 'mlgOg16q6JOR7gVzPxTPSS6t6du1cVem',  
-        issuer: 'https://dev-om7e3m8wvu4na7zj.us.auth0.com/'  
-      })
+    const claims = jwt.verify(token.split(" ")[1] , singInKey)
     // console.log("claims-->" , claims)
    if(!claims){
     return {

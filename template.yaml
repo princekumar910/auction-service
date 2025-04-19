@@ -8,7 +8,7 @@ Description: >
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
   Function:
-    Timeout: 10
+    Timeout: 20
     MemorySize: 128
     Runtime: nodejs20.x
     Architectures:
@@ -21,7 +21,7 @@ Resources:
     Properties:
       CodeUri: ./
       Handler: src/authorizers/authorizer.handler
-      Policies: 
+      Policies:    ## why we giving these if we pass in the lambda authorizer function
         - Statement:
             - Effect: Allow
               Action: execute-api:Invoke
@@ -49,8 +49,8 @@ Resources:
             Path: /auction
             Method: post 
             RestApiId: !Ref MyAuctionApi
-            Auth:
-              Authorizer: MyCustomAuthorizer
+            # Auth:      don't need it because we add it default in the api gateway
+            #   Authorizer: MyCustomAuthorizer
       Policies: 
         - Statement:
             Effect: Allow
@@ -90,8 +90,6 @@ Resources:
             Path: /auction/{id}
             Method: get
             RestApiId: !Ref MyAuctionApi
-            Auth: 
-              Authorizer: MyCustomAuthorizer
       Policies: 
         - DynamoDBReadPolicy:
             TableName: AuctionTable
@@ -110,8 +108,6 @@ Resources:
             Path: /auction/{id}/bid
             Method: patch
             RestApiId: !Ref MyAuctionApi
-            Auth:
-              Authorizer: MyCustomAuthorizer
       Policies: 
         - Statement:
             Effect: Allow
@@ -121,6 +117,7 @@ Resources:
       Environment:
         Variables:
           Table_Name: AuctionTable
+          
   processAuction:
     Type: AWS::Serverless::Function
     Properties:
@@ -130,10 +127,11 @@ Resources:
         DailySchedule:
           Type: Schedule
           Properties:
-            Schedule: rate(1 day)  
+            Schedule: rate(1 hour)  
       Environment:
         Variables:
           Table_Name : AuctionTable
+          QUEUE_URL: https://sqs.eu-north-1.amazonaws.com/209479300905/notification-service-queue
       Policies:
         - Statement:
             - Effect: Allow
@@ -143,7 +141,6 @@ Resources:
               Resource: 
                 - arn:aws:dynamodb:eu-north-1:209479300905:table/AuctionTable/index/statusAndEndingDate    
                 - arn:aws:dynamodb:eu-north-1:209479300905:table/AuctionTable      
-
   AuctionTable:
     Type: AWS::DynamoDB::Table
     Properties:

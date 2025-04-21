@@ -14,6 +14,7 @@ export async function getAuctionById(id){
     TableName : process.env.Table_Name,
     Key : {Id : id}
   }
+  console.log("params" , params)
   try {
     console.log("inside of try block")
     const result = await dynamodbClient.get(params).promise()

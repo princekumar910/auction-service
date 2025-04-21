@@ -77,7 +77,56 @@ Resources:
       Environment:
         Variables:
           Table_Name : AuctionTable 
+  AuctionBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: auction-service-209479300905
+      LifecycleConfiguration:
+        Rules:
+          - Status: Enabled
+            ExpirationInDays: 1
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: false
+        IgnorePublicAcls: false
+        BlockPublicPolicy: false
+        RestrictPublicBuckets: false
 
+  AuctionBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref AuctionBucket
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Sid: PublicReadGetObject
+            Effect: Allow
+            Principal: "*"
+            Action: "s3:GetObject"
+            Resource: !Sub "${AuctionBucket.Arn}/*"
+
+  UploadAuctionImage:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./
+      Handler: src/handler/uploadAuctionImage.handler    
+      Events:
+        AuctionApi:
+          Type: Api
+          Properties:
+            Path: /auction/{id}/image
+            Method: patch
+            RestApiId: !Ref MyAuctionApi
+      Policies:
+        - Statement:
+            Effect: Allow
+            Action:
+              - s3:PutObject
+            Resource: !Sub "${AuctionBucket.Arn}/*"  
+      Environment:
+        Variables:
+          BucketName: auction-service-209479300905
+          Table_Name: AuctionTable             
+    
   getAuctionById:
     Type: AWS::Serverless::Function
     Properties:
